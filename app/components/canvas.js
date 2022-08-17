@@ -10,7 +10,10 @@ export default class Canvas {
         this.vertexShader = vertexShader
         this.fragmentShader = fragmentShader
 
-        this.imgSize = [1920, 1080]
+        this.imgSize = {
+            width: 1920,
+            height: 1080
+        }
 
         const canvas = document.querySelector('.webgl')
         this.renderer = new ogl.Renderer({ canvas: canvas, dpr: 2 })
@@ -39,7 +42,7 @@ export default class Canvas {
     //replace all window.innerWidth and height by using them in store object
     resize() {
         let a1, a2
-        var imageAspect = this.imgSize[1] / this.imgSize[0]
+        var imageAspect = this.imgSize.height / this.imgSize.width
 
         if (window.innerHeight / window.innerWidth < imageAspect) {
             a1 = 1
@@ -83,7 +86,7 @@ export default class Canvas {
         img.src = "text.png"
         
         let a1, a2
-        var imageAspect = this.imgSize[1] / this.imgSize[0]
+        var imageAspect = this.imgSize.height / this.imgSize.width
 
         if (window.innerHeight / window.innerWidth < imageAspect) {
             a1 = 1
@@ -108,7 +111,7 @@ export default class Canvas {
             res: {
                 value: new ogl.Vec4(window.innerWidth, window.innerHeight, textureAspect.a1, textureAspect.a2)
             },
-            img: { value: new ogl.Vec2(this.imgSize[0], this.imgSize[1]) },
+            img: { value: new ogl.Vec2(this.imgSize.width, this.imgSize.height) },
             // Note that the uniform is applied without using an object and value property
             // This is because the class alternates this texture between two render targets
             // and updates the value property after each render.
