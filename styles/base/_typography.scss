@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'jw';
+    src: url('../assets/fonts/jw.woff2') format('woff2');
+    // font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Radikal Medium;
+    src: url('../assets/fonts/radikal_medium.woff2') format("woff2"), url('../assets/fonts/radikal_medium.woff') format("woff");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Radikal Bold;
+    src: url('../assets/fonts/radikal_bold.woff2') format("woff2"), url('../assets/fonts/radikal_bold.woff') format("woff");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}

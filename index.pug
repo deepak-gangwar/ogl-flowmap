@@ -1,0 +1,15 @@
+doctype html
+html(lang="en")
+    head
+        include ./views/partials/head
+        include ./views/partials/noscript
+        
+    body
+        main.app
+            article.home.app__wrapper
+                .webgl__wrapper 
+                    canvas.webgl
+                include ./views/partials/nav
+                include ./views/partials/home
+
+        script(src="main.js") 
