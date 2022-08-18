@@ -17,3 +17,10 @@ npm run dev
 # To build the project (output in public folder)
 npm run build
 ```
+
+
+### Further updates
+
+- Update texture for mobile
+- Use json fonts to apply effect instead of using image.
+- Preloader
