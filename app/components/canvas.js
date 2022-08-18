@@ -29,6 +29,8 @@ export default class Canvas {
         this.lastTime = undefined
         this.lastMouse = new ogl.Vec2()
 
+        this.isTouchCapable = "ontouchstart" in window
+
         this.rAF = undefined
 
         this.init()
@@ -83,7 +85,17 @@ export default class Canvas {
         const img = new Image()
         img.onload = () => (this.texture.image = img)
         img.crossOrigin = "Anonymous"
-        img.src = "text.png"
+
+        // Change images based on device
+        if (this.isTouchCapable) {
+            img.src = "mobile.jpg"
+            this.imgSize = {
+                width: 522,
+                height: 1080
+            }
+        } else {
+            img.src = "desktop.png"
+        }
         
         let a1, a2
         var imageAspect = this.imgSize.height / this.imgSize.width
@@ -200,8 +212,7 @@ export default class Canvas {
         this.update()
       
         // Create handlers to get mouse position and velocity
-        const isTouchCapable = "ontouchstart" in window
-        if (isTouchCapable) {
+        if (this.isTouchCapable) {
             window.addEventListener("touchstart", this.updateMouse, false)
             window.addEventListener("touchmove", this.updateMouse, { passive: false })
         } else {
@@ -214,8 +225,7 @@ export default class Canvas {
     removeEventListeners() {
         this.cancelAnimationFrame(this.rAF)
 
-        const isTouchCapable = "ontouchstart" in window
-        if (isTouchCapable) {
+        if (this.isTouchCapable) {
             window.removeEventListener("touchstart", this.updateMouse, false)
             window.removeEventListener("touchmove", this.updateMouse, { passive: false })
         } else {
