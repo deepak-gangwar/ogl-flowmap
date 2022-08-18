@@ -1,6 +1,7 @@
-# OGL flowmap
+# ✌ OGL flowmap
 
-✌ Inspired by design embraced portfolio by L H Bizarro
+[See it live!](https://flow.deepakgangwar.me/)
+
 
 ### Installation
 
@@ -21,6 +22,5 @@ npm run build
 
 ### Further updates
 
-- Update texture for mobile
 - Use json fonts to apply effect instead of using image.
 - Preloader
