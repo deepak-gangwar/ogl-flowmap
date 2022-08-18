@@ -35,7 +35,7 @@ export default class Canvas {
     }
 
     bind() {
-        ['updateMouse', 'update']
+        ['resize', 'updateMouse', 'update']
             .forEach(fn => this[fn] = this[fn].bind(this))
     }
 
