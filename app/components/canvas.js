@@ -24,7 +24,7 @@ export default class Canvas {
         this.mouse = new ogl.Vec2(-1)
         this.velocity = new ogl.Vec2()
 
-        this.flowmap = new ogl.Flowmap(this.gl)
+        this.flowmap = new ogl.Flowmap(this.gl, { alpha: 0.1 })
 
         this.lastTime = undefined
         this.lastMouse = new ogl.Vec2()

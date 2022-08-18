@@ -56,6 +56,12 @@ nav {
     line-height: 10px;
 }
 
+@media only screen and (max-width: 480px) {
+    #n2 {
+        bottom: 78px;
+    }
+}
+
 .n2 {
     display: table;
 }
@@ -67,6 +73,12 @@ nav {
     text-align: right;
     font-size: 12px;
     line-height: 14px;
+}
+
+@media only screen and (max-width: 480px) {
+    #n2 {
+        bottom: 77px;
+    }
 }
 
 #n3>div {
