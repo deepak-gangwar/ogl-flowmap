@@ -1,0 +1,280 @@
+/*!******************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./styles/index.scss ***!
+  \******************************************************************************************************************************************************************************************************************************************/
+@charset "UTF-8";
+.datgui-ac {
+  z-index: 99999 !important;
+}
+
+@font-face {
+  font-family: "jw";
+  src: url(fonts/jw.woff2) format("woff2");
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: Radikal Bold;
+  src: url(fonts/radikal_bold.woff2) format("woff2"), url(fonts/radikal_bold.woff) format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role=list],
+ol[role=list] {
+  list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+*::before,
+*::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  -webkit-text-size-adjust: none;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+  font-feature-settings: "kern" off;
+  -webkit-font-kerning: none;
+  font-kerning: none;
+  font-family: jw;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: #424242;
+  background-color: #f2f2f2;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a, nav {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: inherit;
+  font-size: 100%;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-style: none;
+}
+
+canvas {
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.home {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home__title {
+  font-size: 13vw;
+  font-family: Radikal Bold;
+  color: #ff949e;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: -0.3rem;
+}
+
+nav {
+  pointer-events: none;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  z-index: 1;
+}
+
+#n0 {
+  position: absolute;
+  top: 35px;
+  left: 38px;
+  font-size: 12px;
+}
+
+.n1 {
+  font-size: 12px;
+  position: absolute;
+  top: 40px;
+  right: 50px;
+  overflow: hidden;
+}
+
+@media only screen and (max-width: 480px) {
+  .n1 {
+    top: 28px;
+  }
+}
+#n1-0,
+#n1-1 {
+  pointer-events: all;
+  font-size: 12px;
+  line-height: 34px;
+  letter-spacing: -0.02em;
+}
+
+.line {
+  width: 100%;
+  height: 2px;
+  position: absolute;
+  left: 0;
+  bottom: 8px;
+  pointer-events: none;
+  background-color: #424242;
+}
+
+.line div {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#n2 {
+  overflow: hidden;
+  position: absolute;
+  bottom: 48px;
+  left: 50px;
+  font-size: 10px;
+  line-height: 10px;
+}
+
+@media only screen and (max-width: 480px) {
+  #n2 {
+    bottom: 78px;
+  }
+}
+.n2 {
+  display: table;
+}
+
+#n3 {
+  position: absolute;
+  bottom: 47px;
+  right: 50px;
+  text-align: right;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+@media only screen and (max-width: 480px) {
+  #n3 {
+    bottom: 77px;
+  }
+}
+#n3 > div {
+  overflow: hidden;
+  padding-left: 20px;
+}
+
+.n3 {
+  display: inline-block;
+  transition: color 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform, color;
+  pointer-events: all;
+}
+
+.n3::after {
+  content: "↗";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding-right: 5px;
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: opacity 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
+}
+
+.n3:hover::after {
+  transition: opacity 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 1;
+}
