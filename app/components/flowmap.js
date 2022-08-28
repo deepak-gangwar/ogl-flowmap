@@ -87,6 +87,10 @@ export default class Canvas {
     createFlowmap() {
         this.flowmap = new Flowmap(this.gl, { alpha: 1, falloff: 0.2, dissipation: 0.9 })
         
+        
+    }
+
+    createPostprocessing() {
         // POST PROCESSING EFFECTS
         this.post = new Post(this.gl)
         this.resolution = { value: new Vec2() }
@@ -348,10 +352,11 @@ export default class Canvas {
         this.createCamera()
         this.createScene()
         this.createFlowmap()
+        this.createPostprocessing()
         // added resize here so as to initialize this.screen and this.viewport to pass into about constructor
         this.resize()
         this.createAbout()
         this.addEventListeners()
-        this.resize()
+        // this.resize()
     }
 }
