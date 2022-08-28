@@ -7,7 +7,7 @@
 
 ```bash
 # Clone the repo on you local machine
-git clone git@github.com:deepak-gangwar/slider-experiments.git
+git clone git@github.com:deepak-gangwar/ogl-flowmap.git
 
 # To install dependencies
 npm install
@@ -22,5 +22,6 @@ npm run build
 
 ### Further updates
 
-- Use json fonts to apply effect instead of using image.
+- ~Use json fonts to apply effect instead of using image.~
 - Preloader
+- Improve resizing on mobile devices
