@@ -1,35 +1,22 @@
-import { ogl } from "./ogl";
+import { Vec2, Renderer, Camera, Transform, Plane, Color, Flowmap, Post } from 'ogl'
+import About from "./about"
 
-import vertexShader from '../shaders/vertex.glsl'
-import fragmentShader from '../shaders/fragment.glsl' 
+import postFragShader from '../shaders/post.glsl'
 
+//  this.canvas in app
 export default class Canvas {
     constructor() {
         this.bind()
 
-        this.vertexShader = vertexShader
-        this.fragmentShader = fragmentShader
-
-        this.imgSize = {
-            width: 1920,
-            height: 1080
-        }
-
-        const canvas = document.querySelector('.webgl')
-        this.renderer = new ogl.Renderer({ canvas: canvas, dpr: 2 })
-        this.gl = this.renderer.gl
-
-        // Variable inputs to control flowmap
-        this.aspect = 1
-        this.mouse = new ogl.Vec2(-1)
-        this.velocity = new ogl.Vec2()
-
-        this.flowmap = new ogl.Flowmap(this.gl, { alpha: 0.1 })
-
-        this.lastTime = undefined
-        this.lastMouse = new ogl.Vec2()
-
         this.isTouchCapable = "ontouchstart" in window
+        
+        this.backgroundColor = new Color("#f4d8cc")
+        this.color = new Color("#ff3a00")
+        
+        this.aspect = 1
+        this.mouse = new Vec2()
+        this.lastMouse = new Vec2()
+        this.velocity = new Vec2()
 
         this.rAF = undefined
 
@@ -37,107 +24,110 @@ export default class Canvas {
     }
 
     bind() {
-        ['resize', 'updateMouse', 'update']
-            .forEach(fn => this[fn] = this[fn].bind(this))
+        ['resize', 'update', 'updateMouse']
+            .forEach((fn) => (this[fn] = this[fn].bind(this)))
     }
 
-    //replace all window.innerWidth and height by using them in store object
-    resize() {
-        let a1, a2
-        var imageAspect = this.imgSize.height / this.imgSize.width
-
-        if (window.innerHeight / window.innerWidth < imageAspect) {
-            a1 = 1
-            a2 = window.innerHeight / window.innerWidth / imageAspect
-        } else {
-            a1 = (window.innerWidth / window.innerHeight) * imageAspect
-            a2 = 1
-        }
-
-        this.mesh.program.uniforms.res.value = new ogl.Vec4(
-            window.innerWidth,
-            window.innerHeight,
-            a1,
-            a2
-        )
-    
-        this.renderer.setSize(window.innerWidth, window.innerHeight)
-        this.aspect = window.innerWidth / window.innerHeight
-    }
-    
-    createGeometry() {
-        // Triangle that includes -1 to 1 range for 'position', and 0 to 1 range for 'uv'.
-        this.geometry = new ogl.Geometry(this.gl, {
-                position: {
-                size: 2,
-                data: new Float32Array([-1, -1, 3, -1, -1, 3])
-            },
-            uv: { size: 2, data: new Float32Array([0, 0, 2, 0, 0, 2]) }
+    createRenderer() {
+        const canvas = document.querySelector('.webgl')
+        this.renderer = new Renderer({
+            canvas: canvas,
+            dpr: Math.min(window.devicePixelRatio, 2),
+            alpha: true, 
+            premultipliedAlpha: true,
         })
+        this.gl = this.renderer.gl
+        this.gl.clearColor(this.backgroundColor.r, this.backgroundColor.g, this.backgroundColor.b, 1)
+        document.body.appendChild(this.gl.canvas)
     }
 
-    updateTexture() {
-        this.texture = new ogl.Texture(this.gl, {
-            minFilter: this.gl.LINEAR,
-            magFilter: this.gl.LINEAR
-        })
-        
-        const img = new Image()
-        img.onload = () => (this.texture.image = img)
-        img.crossOrigin = "Anonymous"
-
-        // Change images based on device
-        if (this.isTouchCapable) {
-            img.src = "mobile.jpg"
-            this.imgSize = {
-                width: 522,
-                height: 1080
-            }
-        } else {
-            img.src = "desktop.png"
-        }
-        
-        let a1, a2
-        var imageAspect = this.imgSize.height / this.imgSize.width
-
-        if (window.innerHeight / window.innerWidth < imageAspect) {
-            a1 = 1
-            a2 = window.innerHeight / window.innerWidth / imageAspect
-        } else {
-            a1 = (window.innerWidth / window.innerHeight) * imageAspect
-            a2 = 1
-        }
-
-        return { a1, a2 }
+    createCamera() {
+        this.camera = new Camera(this.gl)
+        this.camera.fov = 45
+        this.camera.position.z = 50
+        // this.camera.position.z = 5
     }
-    
-    createShaders() {
-        const textureAspect = this.updateTexture()
 
-        this.program = new ogl.Program(this.gl, {
-            vertex: this.vertexShader,
-            fragment: this.fragmentShader,
+    createScene() {
+        this.scene = new Transform()
+    }
+
+    createFlowmap() {
+        this.flowmap = new Flowmap(this.gl, { alpha: 1, falloff: 0.2, dissipation: 0.9 })
+    }
+
+    createPostprocessing() {
+        // POST PROCESSING EFFECTS
+        this.post = new Post(this.gl)
+        this.resolution = { value: new Vec2() }
+        this.pass = this.post.addPass({
+            fragment: postFragShader,
             uniforms: {
-            uTime: { value: 0 },
-            tWater: { value: this.texture },
-            res: {
-                value: new ogl.Vec4(window.innerWidth, window.innerHeight, textureAspect.a1, textureAspect.a2)
+                uResolution: this.resolution,
+                tFlow: this.flowmap.uniform
             },
-            img: { value: new ogl.Vec2(this.imgSize.width, this.imgSize.height) },
-            // Note that the uniform is applied without using an object and value property
-            // This is because the class alternates this texture between two render targets
-            // and updates the value property after each render.
-            tFlow: this.flowmap.uniform
-            }
         })
     }
 
-    createMesh() {
-        this.mesh = new ogl.Mesh(this.gl, { geometry: this.geometry, program: this.program })
+    // 'About' is separated in a class because
+    // it contains aspects of loading MSDF fonts
+    // and this 'Canvas' class contains aspects of flowmap
+    createPageText() {
+        const geo = new Plane(this.gl, { heightSegments: 1, widthSegments: 1 })
+
+        this.about = new About({ 
+                background: this.background, 
+                color: this.color, 
+                geometry: geo, 
+                gl: this.gl, 
+                renderer: this.renderer, 
+                scene: this.scene, 
+                screen: this.screen, 
+                viewport: this.viewport 
+            })
+    }
+
+    calculateUnitSize(z) {
+        const fovInRadian = (this.fov * Math.PI) / 180
+        // basic trigonometry
+        // this gives the width of plane/viewport that would cover the whole screen based on z position
+        const height = 2 * Math.tan(fovInRadian / 2) * z
+
+        return { width: height * this.camera.aspect, height: height }
+    }
+
+    resize() {
+        this.screen = {
+            height: window.innerHeight,
+            width: window.innerWidth
+        }
+
+        this.renderer.setSize(this.screen.width, this.screen.height)
+        this.camera.perspective({ aspect: this.gl.canvas.width / this.gl.canvas.height })
+        this.post.resize()
+        this.resolution.value.set(this.screen.width, this.screen.height)
+
+        // to calculate plane size as per camera distance
+        this.camUnit = this.calculateUnitSize(this.camera.position.z)
+
+        this.viewport = {
+            height: this.camUnit.height,
+            heightHalf: 0.5 * this.camUnit.height,
+            width: this.camUnit.width
+        }
+
+        const s = {
+            screen: this.screen,
+            viewport: this.viewport
+        }
+
+        this.aspect = window.innerWidth / window.innerHeight;
+
+        // this.about && this.about.onResize(s)
     }
 
     updateMouse(e) {
-        e.preventDefault();
+        e.preventDefault()
 
         if (e.changedTouches && e.changedTouches.length) {
             e.x = e.changedTouches[0].pageX
@@ -149,7 +139,7 @@ export default class Canvas {
         }
         
         // Get mouse value in 0 to 1 range, with y flipped
-        this.mouse.set(e.x / this.gl.renderer.width, 1.0 - e.y / this.gl.renderer.height);
+        this.mouse.set(e.x / this.gl.renderer.width, 1.0 - e.y / this.gl.renderer.height)
 
         // Calculate velocity
         if (!this.lastTime) {
@@ -171,33 +161,30 @@ export default class Canvas {
 
         this.velocity.x = deltaX / delta
         this.velocity.y = deltaY / delta
-        
+
         // Flag update to prevent hanging velocity values when not moving
         this.velocity.needsUpdate = true
     }
 
-    update(t) {
+    update() {
         requestAnimationFrame(this.update)
-    
+
         // Reset velocity when mouse not moving
         if (!this.velocity.needsUpdate) {
             this.mouse.set(-1)
             this.velocity.set(0)
         }
-    
         this.velocity.needsUpdate = false
-    
-        // Update flowmap inputs
+
+        // UPDATE FLOWMAP INPUTS
+        this.flowmap.mesh.program.uniforms.uFalloff.value = 0.1
+        // this.flowmap.aspect = this.screen.width / this.screen.height
         this.flowmap.aspect = this.aspect
         this.flowmap.mouse.copy(this.mouse)
-    
-        // Ease velocity input, slower when fading out
-        this.flowmap.velocity.lerp(this.velocity, this.velocity.len ? 0.15 : 0.1)
+        this.flowmap.velocity.lerp(this.velocity, 0.1)
         this.flowmap.update()
-    
-        this.program.uniforms.uTime.value = t * 0.01
-        
-        this.renderer.render({ scene: this.mesh })
+
+        this.post.render({ scene: this.scene, camera: this.camera })
     }
 
     requestAnimationFrame() {
@@ -221,7 +208,7 @@ export default class Canvas {
         
         window.addEventListener("resize", this.resize, false)
     }
-    
+
     removeEventListeners() {
         this.cancelAnimationFrame(this.rAF)
 
@@ -240,10 +227,13 @@ export default class Canvas {
     }
 
     init() {
-        this.createGeometry()
-        this.createShaders()
-        this.createMesh()
-        this.addEventListeners()
+        this.createRenderer()
+        this.createCamera()
+        this.createScene()
+        this.createFlowmap()
+        this.createPostprocessing()
         this.resize()
+        this.createPageText()
+        this.addEventListeners()
     }
 }

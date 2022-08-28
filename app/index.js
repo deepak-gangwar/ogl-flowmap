@@ -1,4 +1,4 @@
-import Canvas from "./components/flowmap"
+import Canvas from "./components/canvas"
 
 class App {
     constructor() {
