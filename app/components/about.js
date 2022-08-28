@@ -5,6 +5,9 @@ import vertex from "../shaders/vertex.glsl"
 import fragment from "../shaders/fragment.glsl"
 import { check } from '../utils/check';
 
+// import Suisse from '../utils/suisse.json' assert { type: json }
+import { Suisse } from '../utils/font'
+
 const vertex100 =
     /* glsl */ `
 ` + vertex;
@@ -81,21 +84,21 @@ export default class About {
         })
     }
 
-    async createMesh() {
-        // this font can be inlined as well
-        const font = await (await fetch('suisse.json')).json()
-
+    createMesh() {
+        // this font to be used when writing async await syntax to fetch json font file
+        // current font is inlines, imported as const Suisse
+        // const font = await (await fetch('suisse.json')).json()
+        
         const text = new Text({
             width: 4,
-            // font: Ar, 
-            font, 
+            font: Suisse, 
             align: 'center',
             letterSpacing: -0.05,
             lineHeight: 0.7,
             size: 10.1,
             text: this.text,
         })
-
+        
         // Pass the generated buffers into a geometry
         this.geometry = new Geometry(this.gl, {
             position: { size: 3, data: text.buffers.position },
