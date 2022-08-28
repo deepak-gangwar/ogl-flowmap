@@ -177,7 +177,7 @@ export default class Canvas {
     }
 
     update(t) {
-        requestAnimationFrame(this.update);
+        requestAnimationFrame(this.update)
     
         // Reset velocity when mouse not moving
         if (!this.velocity.needsUpdate) {

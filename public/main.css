@@ -188,6 +188,11 @@ nav {
   overflow: hidden;
 }
 
+@media only screen and (max-width: 480px) {
+  .n1 {
+    top: 28px;
+  }
+}
 #n1-0,
 #n1-1 {
   pointer-events: all;
@@ -242,7 +247,7 @@ nav {
 }
 
 @media only screen and (max-width: 480px) {
-  #n2 {
+  #n3 {
     bottom: 77px;
   }
 }
